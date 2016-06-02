@@ -10,15 +10,25 @@
 
     <title>Local Weather</title>
 
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
     <!-- This is the main stylesheet for my own stylings -->
     <link href="resources/css/main_stylesheet.css" rel="stylesheet" >
 
   </head>
   <body>
+    <!-- add a poster="foo.jpg" -->
+    <video autoplay loop id="bgvid">
+
+    </video>
     <div id="weather-block">
-      <p id="weather">
+      <div id="weather">
         The weather is...
-      </p>
+      </div>
+      <div id="buttons">
+        <button id="celsius" onclick="changeTemp(0)">&degC</button>
+        <button id="fahr" onclick="changeTemp(1)">&degF</button>
+      </div>
     </div>
     <!-- This is the main entry point for the javascript stuff -->
     <script src="resources/js/main.js"></script>

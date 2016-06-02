@@ -1,3 +1,6 @@
+var temp = undefined;
+var state = 0;
+
 window.onload = function() {
   var startPos;
   var geoSuccess = function( position ) {
@@ -21,13 +24,44 @@ function getWeather(position) {
       var response = xmlRequest.responseText;
       var weatherObject = JSON.parse(response);
 
-      var city = weatherObject.name;
-      var temp = "<br>" + (Math.round( weatherObject.main.temp - 273 )) + "&deg Celsius";
-      var humidity = "<br>" + "Humidity: " + weatherObject.main.humidity + "%";
-      var weather = "<br>" + toTitleCase( weatherObject.weather[0].description );
+      var city = "<p id='city'>" + weatherObject.name + "</p>";
+      temp = (Math.round( weatherObject.main.temp - 273 ));
+      var tempDisplay = "<p id='temp'>" + temp + "&deg Celsius" + "</p>";
+      var humidity = "<p id='humidity'>" + "Humidity: " + weatherObject.main.humidity + "%" + "</p>";
+      var weatherType = weatherObject.weather[0].main;
+      weatherType = 'Clear';
 
+      var tieBreak = Math.round(Math.random());
+      switch (weatherType) {
+        case 'Clouds':
+          if (tieBreak === 0) {
+            addToElement('bgvid', '<source src="resources/videos/blueSkyClouds.mp4" type="video/mp4">');
+          } else {
+            addToElement('bgvid', '<source src="resources/videos/cloudsOverField.mp4" type="video/mp4">');
+          }
+          break;
+        case 'Drizzle':
+          addToElement('bgvid', '<source src="resources/videos/lightRain.mp4" type="video/mp4">');
+          break;
+        case 'Thunderstorm':
+        case 'Rain':
+          addToElement('bgvid', '<source src="resources/videos/heavyRain.mp4" type="video/mp4">');
+          break;
+        case 'Snow':
+          addToElement('bgvid', '<source src="resources/videos/lightSnow.mp4" type="video/mp4">');
+          break;
+        case 'Clear':
+          if (tieBreak === 0) {
+            addToElement('bgvid', '<source src="resources/videos/sunsetGrass.mp4" type="video/mp4">');
+          } else {
+            addToElement('bgvid', '<source src="resources/videos/sunny.mp4" type="video/mp4">');
+          }
+          break;
+        default:
+          addToElement('bgvid', '<source src="resources/videos/sunsetClouds.mp4" type="video/mp4">');
+      }
 
-      addToElement( 'weather', city, temp, humidity, weather );
+      addToElement( 'weather', city, tempDisplay, humidity );
     }
   };
 
@@ -35,22 +69,31 @@ function getWeather(position) {
   // it's a free key so I'm taking the liberty to do it this way.
   var key = "af1515bf3429c1c7bf62fc74f5c2066f";
   var url = "http://api.openweathermap.org/data/2.5/weather?lat=" + latitude + "&lon=" + longitude + "&appid=" + key;
-  xmlRequest.open( "GET", url, true );
+  xmlRequest.open( "GET", url  + ((/\?/).test(url) ? "&" : "?") + (new Date()).getTime(), true );
   xmlRequest.send();
 
-};
-
-
-// From http://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript/196991#196991
-// Not a bad function to write, but why reinvent the wheel...
-function toTitleCase(str)
-{
-    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 };
 
 function addToElement(id, string) {
   document.getElementById(id).innerHTML = "";
   for (i = 1; i < arguments.length; i++) {
     document.getElementById(id).innerHTML += arguments[i];
+  }
+};
+
+function changeTemp(changeState) {
+  // The temperature is in Celsius
+  if (changeState === 0 && state === 1) {
+    // temp should be in C but is in F
+    temp = Math.round((temp - 32) / 1.8);
+    document.getElementById('temp').innerHTML = temp + "&deg Celsius";
+    state = 0;
+  } else if (changeState === 1 && state === 0) {
+    // temp should be in F but is in C
+    temp = Math.round((temp * 1.8) + 32);
+    document.getElementById('temp').innerHTML = temp + "&deg Fahrenheit";
+    state = 1;
+  } else {
+    return -1;
   }
 };

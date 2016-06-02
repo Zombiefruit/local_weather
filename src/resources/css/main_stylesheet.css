@@ -2,7 +2,9 @@ html, body {
   margin: 0 auto;
   height: 100%;
   width: 100%;
-  background-color: darkgrey;
+  background-color: black;
+  overflow: hidden
+
 }
 
 #weather-block {
@@ -12,17 +14,44 @@ html, body {
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   margin: 0 auto;
-  height: 400px;
-  width: 700px;
+  height: 500px;
+  width: 500px;
   text-align: center;
-  background-color: lightgrey;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
-#weather-block p {
+#weather {
   margin: 0;
   vertical-align: middle;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  font-family: 'Roboto', sans-serif;
+  font-size: 36px;
+  width: 400px;
+  height: 400px;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+#city {
+  font-size: 30px;
+}
+
+video #bgvid {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+    background: url(polina.jpg) no-repeat;
+    background-size: cover;
 }
